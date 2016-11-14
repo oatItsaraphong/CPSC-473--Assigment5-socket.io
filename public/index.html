@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <title>Trivia Game - Assignment 4 - Itsaraphong</title>
+    <link rel='stylesheet' type='text/css' href='semantic/dist/semantic.min.css'>
+		  	<script src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+    <script src='semantic/dist/semantic.min.js'></script>
+</head>
+
+<body>
+	<header class='ui header'>
+		<div class='ui equal width center aligned padded grid'>
+			<div class='blue column'>
+				<h1>Trivia Game<i class='help icon'></i></h1>
+			</div>
+	</div>
+	</header>
+
+	<div class='ui equal width center aligned padded grid'>
+		<div class='row'>
+			<div class='blue eight wide column'>
+				<form class='ui form oneQuestion'>
+				</form>
+				<br><br>
+			</div>
+
+			<div class='blue four wide column'>
+				<div class="ui inverted teal segment">
+						<label><h2> Players Online </h2></label>
+					  <div class="ui inverted relaxed divided list" id="userList">
+					  </div>
+				</div>
+			</div>
+		</div>
+
+		<div class='row'>
+			<div class='blue eight wide column'>
+				<h2>Your Score<i class='checkmark icon'></i></h2>
+			</div>
+			<div class='blue four wide column'>
+				<br><br>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='olive four wide column'>
+				<div class='ScoreCorrect'>
+				</div>
+			</div>
+			<div class='red four wide column'>
+				<div class='ScoreIncorrect'>
+				</div>
+			</div>
+			<div class='blue four wide column'>
+				<br><br>
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<div class='ui equal width center aligned padded grid'>
+		<div class='row'>
+			<div class='violet twelve wide column'>
+				<div><h3 class='ui white horizontal divider header'>
+  			<i class='add circle icon'></i>
+  				Add Your Question
+				</h3></div>
+			</div>
+		</div>
+		<div class='row'>
+			<div class='purple twelve wide  column'>
+			<form class='ui form addQuestion'>
+			  <div class='field'>
+			    <label class='left large questionPlace'>Enter question and answer to database</label>
+					<input type='text' class='newQuestion' name='addquestion-holder' placeholder='Add question'>
+			    <input type='text' class='newAnswer' name='addanswer-holder' placeholder='Add answer'>
+			  </div>
+			  <button class='ui fluid pink button' type='submit'>Submit Question</button>
+			</form>
+			</div>
+		</div>
+</div>
+
+<footer>
+	<div class='ui blue fixed bottom inverted segment'><i class='copyright icon'></i>
+		Trivia Game - by Itsaraphong Sawangsri
+	</div>
+</footer>
+		<script src="/socket.io/socket.io.js"></script>
+    <script src='javascripts/app.js'></script>
+</body>
+
+</html>
