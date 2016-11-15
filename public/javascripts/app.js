@@ -45,8 +45,6 @@ var AdjustQuestion = function(questionObject){
   WaitClick();
 };//end AdjustQuestion
 
-
-
 function WaitUser(){
   'use strict';
   $('.addInUser').click(function(){
@@ -62,13 +60,16 @@ socket.on('IOName', function(msg, data1, data2){
    '<div class="item"><div class="content">' +
    '<div class="header">' +
    msg + '</div>' +
-   'right:' + data1 + '- - - wrong:' + data2 +
+   '<i class="check green big circle icon"></i>' + data1 +
+   '  - - - <i class="check red big remove circle icon"></i>:' + data2 +
    '</div></div>' +
    '<div class="ui divider"></div>'));
 })
+
 socket.on('IONameEmpty', function(){
   $('#userList').empty();
 })
+
 socket.on('AltScore', function(UserIn,scoreRightIn, scoreWrongIn){
   if(UserIn === USERNAME){
     var tempScore = {'right': scoreRightIn, 'wrong': scoreWrongIn};
@@ -76,14 +77,31 @@ socket.on('AltScore', function(UserIn,scoreRightIn, scoreWrongIn){
   }
 })
 
+socket.on('EndScore', function(UserIn,scoreRightIn, scoreWrongIn){
+  if(UserIn === USERNAME){
+    var tempScore = {'right': scoreRightIn, 'wrong': scoreWrongIn};
+    ScoreUpdate(tempScore);
+
+    $('.oneQuestion').empty();
+    $('.oneQuestion').append(
+      '<h2>Result:</h2>' +
+      '<label class="playerName" name="playerValue"><h3>' +
+      USERNAME + '\'s total score out of 10 questions is </h3></label>' +
+      '<div><h3> Right: ' + scoreRightIn + '</h3></div>' +
+      '<div><h3> Wrong: ' + scoreWrongIn + '</h3></div>' +
+      '<a href="http://localhost:3000"' +
+      'class="ui button fluid teal large FinRoung"' +
+      'id="EndRound" type="button">' +
+      'Begin Again</a>'+
+      '<div>**Begin Again will delete everything include previour attemp</div>'
+    );
+  }
+})
+
 
 //function that always listening
 var main = function(){
   'use strict';
-
-
-
-
   //socket.emit('IOName', USERNAME);
 
   $('.addQuestion').form({
@@ -124,10 +142,10 @@ var main = function(){
 function EnterUserName(){
   'use strict';
   $('.oneQuestion').append(
-    '<label>Enter Username To Begin the Game</label>'+
+    '<label><h3>Enter Username To Begin the Game</h3></label>'+
     '<input type="text" class="userNameIO" name="NameOfUser">' +
     '<button class="ui button fluid teal large addInUser"' +
-    'id="AnswerToThis" type="button">Start the Game</button>'
+    'id="AnswerToThis" type="button">Start the Round</button>'
   );
   WaitUser();
 }//end EnterUserName

@@ -33,6 +33,7 @@ var socketCaller;
 var newscoreUpdate,
     getPosition;
 var QuestionDb = mongoose.model('questionCollection', questionSchema);
+var questionLimit = 10;
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -79,6 +80,10 @@ io.on('connection', function(socket){
     for(;i < allUser.length; i++){
       if(allUser[i].UserName === msg)
       {
+        if((allUser[i].wrongScore + allUser[i].rightScore) === questionLimit){
+          io.emit('EndScore', allUser[i].UserName, allUser[i].rightScore,
+                  allUser[i].wrongScore);
+        }
         io.emit('AltScore', allUser[i].UserName, allUser[i].rightScore,
                 allUser[i].wrongScore);
         break;
