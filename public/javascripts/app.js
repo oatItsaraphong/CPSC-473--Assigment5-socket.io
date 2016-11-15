@@ -23,6 +23,7 @@ var scoreUpdate = function(scoreObject){
     '<div><h3>Wrong: ' + scoreObject.wrong + '</h3></div>'
   );
 };//end ScoreUpdate
+
 //dispay a new question
 var adjustQuestion = function(questionObject){
   'use strict';
@@ -46,6 +47,7 @@ var adjustQuestion = function(questionObject){
   waitClick();
 };//end AdjustQuestion
 
+//wait for the user to enter their name and add in
 function waitUser(){
   'use strict';
   $('.addInUser').click(function(){
@@ -56,6 +58,7 @@ function waitUser(){
   });
 }
 
+//update when the playerlist have change
 socket.on('IOName', function(msg, data1, data2){
   'use strict';
  $('#userList').append($('<li>').html(
@@ -68,11 +71,13 @@ socket.on('IOName', function(msg, data1, data2){
    '<div class="ui divider"></div>'));
 });
 
+//empty the playerlist
 socket.on('IONameEmpty', function(){
   'use strict';
   $('#userList').empty();
 });
 
+//print the score to the main score board in the buttom of the grid
 socket.on('AltScore', function(UserIn,scoreRightIn, scoreWrongIn){
   'use strict';
   if(UserIn === USERNAME){
@@ -81,12 +86,15 @@ socket.on('AltScore', function(UserIn,scoreRightIn, scoreWrongIn){
   }
 });
 
+//get update when the user reach max number of questionLimit (10)
 socket.on('EndScore', function(UserIn,scoreRightIn, scoreWrongIn){
   'use strict';
+  //update the score in the main scoreboard
   if(UserIn === USERNAME){
     var tempScore = {'right': scoreRightIn, 'wrong': scoreWrongIn};
     scoreUpdate(tempScore);
 
+    //print out the result
     $('.oneQuestion').empty();
     $('.oneQuestion').append(
       '<h2>Result:</h2>' +
@@ -144,6 +152,7 @@ var main = function(){
   //GetQuestionNew();
 };//big loop
 
+//callend to enter the user name at the start of the website
 function enterUserName(){
   'use strict';
   $('.oneQuestion').append(

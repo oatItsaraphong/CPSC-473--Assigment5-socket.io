@@ -29,9 +29,10 @@ var questionSchema = new mongoose.Schema({
   answerID: Number
 });
 
-var newscoreUpdate,
-    getPosition;
+var newscoreUpdate;
 var QuestionDb = mongoose.model('questionCollection', questionSchema);
+
+//Predefine numbers of questions for user to answer
 var questionLimit = 10;
 
 
@@ -43,12 +44,14 @@ http.listen(3000);
 console.log('!---- Trivia Game server side, listening at port 3000 ----!');
 
 //----Function Code------------------------------------------
+//main global array for every user
 var allUser= [],  clearAndPrint;
 
 //=======IO Function=======================================
 io.on('connection', function(socket){
   'use strict';
 
+  //create a new user and add to the array
   socket.on('IOName', function(msg){
     console.log('777' + msg);
     var newUser = {
@@ -61,6 +64,7 @@ io.on('connection', function(socket){
     clearAndPrint();
   });
 
+  //update the playerlist when disconected
   socket.on('disconnect',function(){
     var i = 0;
     for(;i < allUser.length; i++){
@@ -75,6 +79,7 @@ io.on('connection', function(socket){
     clearAndPrint();
   });
 
+  //update the score
   socket.on('getScore', function(msg){
     var i = 0;
     for(;i < allUser.length; i++){
@@ -90,6 +95,8 @@ io.on('connection', function(socket){
       }
     }
   });
+
+  //update the playerlist
   clearAndPrint = function(){
     io.emit('IONameEmpty');
     var i = 0;
@@ -100,11 +107,12 @@ io.on('connection', function(socket){
     }
   };
 
-
+  //get call when the score get update from JSON
   socket.on('scoreUp', function(data, result){
     newscoreUpdate(data, result);
   });
 
+  //update the score in the main scorebaord
   newscoreUpdate = function(dataIn, resultIn){
     var i = 0;
     for(;i < allUser.length; i++){
@@ -121,19 +129,6 @@ io.on('connection', function(socket){
       }
     }
     clearAndPrint();
-    return i;
-  };
-
-  getPosition = function(){
-    var i = 0;
-    for(;i < allUser.length;)
-    {
-      if(allUser[i].UserID === socket.id)
-      {
-        break;
-      }
-      i++;
-    }
     return i;
   };
 
