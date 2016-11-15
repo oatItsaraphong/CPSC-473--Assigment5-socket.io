@@ -1,16 +1,17 @@
 /* jshint browser: true, jquery: true, camelcase: true, indent: 2, undef: true, quotmark: single, maxlen: 80, trailing: true, curly: true, eqeqeq: true, forin: true, immed: true, latedef: true, newcap: true, nonew: true, unused: true, strict: true */
 
-var WaitClick;
-var AddQuestionFunction;
-var AnswerQuestionOne;
-var GetScore;
-var GetQuestionNew;
+var waitClick;
+var addQuestionFunction;
+var answerQuestionOne;
+var getScore;
+var getQuestionNew;
 var USERNAME;
+var enterUserName;
 
 var socket = io();
 
 //score display
-var ScoreUpdate = function(scoreObject){
+var scoreUpdate = function(scoreObject){
   'use strict';
   $('.ScoreCorrect').empty();
   $('.ScoreCorrect').append(
@@ -23,7 +24,7 @@ var ScoreUpdate = function(scoreObject){
   );
 };//end ScoreUpdate
 //dispay a new question
-var AdjustQuestion = function(questionObject){
+var adjustQuestion = function(questionObject){
   'use strict';
   $('.oneQuestion').empty();
   $('.oneQuestion').append(
@@ -42,20 +43,21 @@ var AdjustQuestion = function(questionObject){
     '<button class="ui button fluid teal large ToAnswer"' +
     'id="AnswerToThis" type="button">Answer</button>'
   );
-  WaitClick();
+  waitClick();
 };//end AdjustQuestion
 
-function WaitUser(){
+function waitUser(){
   'use strict';
   $('.addInUser').click(function(){
     USERNAME = document.getElementsByName('NameOfUser')[0].value;
     socket.emit('IOName', USERNAME);
     console.log(USERNAME);
-    GetQuestionNew();
+    getQuestionNew();
   });
 }
 
 socket.on('IOName', function(msg, data1, data2){
+  'use strict';
  $('#userList').append($('<li>').html(
    '<div class="item"><div class="content">' +
    '<div class="header">' +
@@ -64,23 +66,26 @@ socket.on('IOName', function(msg, data1, data2){
    '  - - - <i class="check red big remove circle icon"></i>:' + data2 +
    '</div></div>' +
    '<div class="ui divider"></div>'));
-})
+});
 
 socket.on('IONameEmpty', function(){
+  'use strict';
   $('#userList').empty();
-})
+});
 
 socket.on('AltScore', function(UserIn,scoreRightIn, scoreWrongIn){
+  'use strict';
   if(UserIn === USERNAME){
     var tempScore = {'right': scoreRightIn, 'wrong': scoreWrongIn};
-    ScoreUpdate(tempScore);
+    scoreUpdate(tempScore);
   }
-})
+});
 
 socket.on('EndScore', function(UserIn,scoreRightIn, scoreWrongIn){
+  'use strict';
   if(UserIn === USERNAME){
     var tempScore = {'right': scoreRightIn, 'wrong': scoreWrongIn};
-    ScoreUpdate(tempScore);
+    scoreUpdate(tempScore);
 
     $('.oneQuestion').empty();
     $('.oneQuestion').append(
@@ -96,7 +101,7 @@ socket.on('EndScore', function(UserIn,scoreRightIn, scoreWrongIn){
       '<div>**Begin Again will delete everything include previour attemp</div>'
     );
   }
-})
+});
 
 
 //function that always listening
@@ -127,19 +132,19 @@ var main = function(){
         },
     onSuccess: function(event) {
       event.preventDefault();
-      AddQuestionFunction();
+      addQuestionFunction();
       $('.newQuestion').val('');
       $('.newAnswer').val('');
       //GetQuestionNew();
       console.log('form valid');
     }
   });
-  EnterUserName();
+  enterUserName();
 
   //GetQuestionNew();
 };//big loop
 
-function EnterUserName(){
+function enterUserName(){
   'use strict';
   $('.oneQuestion').append(
     '<label><h3>Enter Username To Begin the Game</h3></label>'+
@@ -147,11 +152,11 @@ function EnterUserName(){
     '<button class="ui button fluid teal large addInUser"' +
     'id="AnswerToThis" type="button">Start the Round</button>'
   );
-  WaitUser();
+  waitUser();
 }//end EnterUserName
 
 //ajax when answer the question
-function AnswerQuestionOne(){
+function answerQuestionOne(){
   'use strict';
 
   var aToSend = $('.answerClass').val();
@@ -181,7 +186,7 @@ function AnswerQuestionOne(){
 }//end AnswerQuestion
 
 //ajax when the score need update
-function GetScore(){
+function getScore(){
   'use strict';
   console.log('retieve score');
   $.ajax({
@@ -198,7 +203,7 @@ function GetScore(){
 }//end GetScore
 
 //ajax retive one question get it at randome by server
-function GetQuestionNew(){
+function getQuestionNew(){
   'use strict';
   console.log('retieve question');
   $.ajax({
@@ -219,8 +224,8 @@ function GetQuestionNew(){
               );
             }
             else{
-              AdjustQuestion(data);
-              GetScore();
+              adjustQuestion(data);
+              getScore();
             }
           }
     });
@@ -228,7 +233,7 @@ function GetQuestionNew(){
 }//end GetQuestionNew
 
 //ajax added question to the db
-function AddQuestionFunction(){
+function addQuestionFunction(){
   'use strict';
 
   var qToSend = document.getElementsByName('addquestion-holder')[0].value;
@@ -252,12 +257,12 @@ function AddQuestionFunction(){
 }//end AddQuestionFunction
 
 //wait for user to answer
-function WaitClick(){
+function waitClick(){
   'use strict';
   $('#AnswerToThis').click(function(){
     console.log('ToAnswer');
-    AnswerQuestionOne();
-    GetQuestionNew();
+    answerQuestionOne();
+    getQuestionNew();
   });
 }
 

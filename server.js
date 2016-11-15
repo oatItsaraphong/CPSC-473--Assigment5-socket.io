@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost/TriviaGame');
 mongoose.set('debug', true);
 
 //redis connection
-client = redis.createClient();
+var client = redis.createClient();
 client.on('connect', function() {
     'use strict';
     console.log('connected');
@@ -29,7 +29,6 @@ var questionSchema = new mongoose.Schema({
   answerID: Number
 });
 
-var socketCaller;
 var newscoreUpdate,
     getPosition;
 var QuestionDb = mongoose.model('questionCollection', questionSchema);
@@ -44,10 +43,11 @@ http.listen(3000);
 console.log('!---- Trivia Game server side, listening at port 3000 ----!');
 
 //----Function Code------------------------------------------
-var allUser= [], questionNumber, clearAndPrint;
+var allUser= [],  clearAndPrint;
 
 //=======IO Function=======================================
 io.on('connection', function(socket){
+  'use strict';
 
   socket.on('IOName', function(msg){
     console.log('777' + msg);
@@ -98,7 +98,7 @@ io.on('connection', function(socket){
       io.emit('IOName', allUser[i].UserName, allUser[i].rightScore,
               allUser[i].wrongScore);
     }
-  }
+  };
 
 
   socket.on('scoreUp', function(data, result){
@@ -122,7 +122,7 @@ io.on('connection', function(socket){
     }
     clearAndPrint();
     return i;
-  }
+  };
 
   getPosition = function(){
     var i = 0;
@@ -135,7 +135,7 @@ io.on('connection', function(socket){
       i++;
     }
     return i;
-  }
+  };
 
 });//end connection
 
@@ -163,7 +163,7 @@ var setDefaultScore = function() {
 //return score from redis
 app.get('/score', function(req,res){
   'use strict';
-  io.on('scoreUp', function(data){
+  io.on('scoreUp', function(){
     console.log('7777777777');
   });
   var i = 0;
@@ -260,7 +260,7 @@ app.post('/question', function(req, res){
                       answerString: answerIn,
                       answerID: result});
       //save dataset
-      q1.save(function(err, result){
+      q1.save(function(err){
         if(err){
           console.log('Error Save to DB');
           res.json('Error Saving to DB');
